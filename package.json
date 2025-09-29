@@ -4,8 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:staging": "NODE_ENV=staging next dev --turbopack",
+    "dev:production": "NODE_ENV=production next dev --turbopack",
     "build": "next build --turbopack",
+    "build:staging": "NODE_ENV=staging next build --turbopack",
+    "build:production": "NODE_ENV=production next build --turbopack",
     "start": "next start",
+    "start:staging": "NODE_ENV=staging next start",
+    "start:production": "NODE_ENV=production next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "format": "prettier --write .",
@@ -15,7 +21,8 @@
   "dependencies": {
     "next": "15.5.4",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
