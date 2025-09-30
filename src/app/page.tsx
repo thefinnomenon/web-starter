@@ -1,104 +1,375 @@
+"use client"
+
 import { env } from "@/lib/env"
-import Image from "next/image"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { ThemeToggle } from "@/components/theme-toggle"
+
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  age: z.coerce
+    .number()
+    .min(13, {
+      message: "Must be at least 13 years old.",
+    })
+    .max(120, {
+      message: "Must be less than 120 years old.",
+    }),
+  website: z
+    .string()
+    .url({
+      message: "Please enter a valid URL.",
+    })
+    .optional()
+    .or(z.literal("")),
+})
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            {env.APP_NAME} v{env.APP_VERSION} running in {env.APP_ENV}
-          </li>
-        </ol>
+  const [count, setCount] = useState(0)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      age: undefined,
+      website: "",
+    },
+  })
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    toast.success("Form submitted successfully!", {
+      description: `Hello ${values.name}! We'll contact you at ${values.email}`,
+    })
+    form.reset()
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Enhanced Navigation Bar */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <h1 className="text-xl font-bold">{env.APP_NAME}</h1>
+              <Badge variant="secondary">v{env.APP_VERSION}</Badge>
+              <Badge variant="outline">{env.APP_ENV}</Badge>
+            </div>
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-4">Web Starter Examples</h1>
+          <p className="text-lg text-muted-foreground mb-2">
+            A modern Next.js starter with shadcn/ui components, dark mode, toast
+            notifications, and form validation.
+          </p>
+          <p className="text-muted-foreground">
+            Try out the interactive examples below to see everything in action.
+          </p>
+        </div>
+        <Separator className="mb-8" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left Column */}
+          <div className="space-y-6">
+            {/* Button Examples */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Button Variants</CardTitle>
+                <CardDescription>
+                  Different button styles and variants available in shadcn/ui
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    onClick={() => toast.success("Primary button clicked!")}
+                  >
+                    Primary
+                  </Button>
+                  <Button variant="secondary">Secondary</Button>
+                  <Button variant="destructive">Destructive</Button>
+                  <Button variant="outline">Outline</Button>
+                  <Button variant="ghost">Ghost</Button>
+                  <Button variant="link">Link</Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Counter Example */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Interactive Counter</CardTitle>
+                <CardDescription>
+                  State management example with increment, decrement, and reset
+                  functionality
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setCount(Math.max(0, count - 1))}
+                    disabled={count <= 0}
+                  >
+                    -
+                  </Button>
+                  <div className="text-center">
+                    <div className="text-3xl font-mono font-bold">{count}</div>
+                    <div className="text-sm text-muted-foreground">Count</div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setCount(count + 1)}
+                  >
+                    +
+                  </Button>
+                </div>
+                <div className="flex justify-center">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setCount(0)
+                      toast.info("Counter reset to 0")
+                    }}
+                    disabled={count === 0}
+                  >
+                    Reset
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Toast Examples */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Toast Notifications</CardTitle>
+                <CardDescription>
+                  Beautiful toast messages with different types and styles
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      toast.success("Success! Operation completed.")
+                    }
+                  >
+                    Success Toast
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => toast.error("Error! Something went wrong.")}
+                  >
+                    Error Toast
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => toast.info("Info: Here's some information.")}
+                  >
+                    Info Toast
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => toast.warning("Warning: Please check this.")}
+                  >
+                    Warning Toast
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-6">
+            {/* Form Validation Example */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Form Validation</CardTitle>
+                <CardDescription>
+                  Real-time validation with React Hook Form and Zod schema
+                  validation
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter your name" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Must be at least 2 characters.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="Enter your email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Must be a valid email address.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="age"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Age</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              placeholder="Enter your age"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Must be between 13 and 120.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="website"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Website (Optional)</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="url"
+                              placeholder="https://example.com"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Must be a valid URL if provided.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <Button type="submit" className="w-full">
+                      Submit Form
+                    </Button>
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+
+            {/* Environment Info */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Environment Configuration</CardTitle>
+                <CardDescription>
+                  Current environment variables and application settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">App Name</span>
+                    <Badge variant="outline">{env.APP_NAME}</Badge>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">Version</span>
+                    <Badge variant="secondary">{env.APP_VERSION}</Badge>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">Environment</span>
+                    <Badge
+                      variant={
+                        env.APP_ENV === "production"
+                          ? "destructive"
+                          : env.APP_ENV === "staging"
+                            ? "default"
+                            : "secondary"
+                      }
+                    >
+                      {env.APP_ENV}
+                    </Badge>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">API URL</span>
+                    <span className="text-sm text-muted-foreground font-mono">
+                      {env.API_URL}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   )
 }
