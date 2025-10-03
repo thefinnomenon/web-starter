@@ -1,6 +1,5 @@
 "use client"
 
-import { env } from "@/lib/env"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/form"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { metrics } from "@/lib/mixpanel"
+import { isProduction, isStaging } from "@/lib/env"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -81,7 +81,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Badge variant="outline">{env.APP_ENV}</Badge>
+              <Badge variant="outline">{process.env.NEXT_PUBLIC_APP_ENV}</Badge>
             </div>
             <ThemeToggle />
           </div>
@@ -336,14 +336,14 @@ export default function Home() {
                     <span className="font-medium">Environment</span>
                     <Badge
                       variant={
-                        env.APP_ENV === "production"
+                        isProduction()
                           ? "destructive"
-                          : env.APP_ENV === "staging"
+                          : isStaging()
                             ? "default"
                             : "secondary"
                       }
                     >
-                      {env.APP_ENV}
+                      {process.env.NEXT_PUBLIC_APP_ENV}
                     </Badge>
                   </div>
                 </div>
