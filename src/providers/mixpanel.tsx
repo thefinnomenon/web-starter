@@ -11,6 +11,8 @@ export default function MixpanelProvider({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const queryString =
+    typeof window !== "undefined" ? window.location.search : ""
   const lastPathRef = useRef<string | null>(null)
 
   useEffect(() => {
@@ -20,8 +22,6 @@ export default function MixpanelProvider({
   useEffect(() => {
     if (!isProduction()) return
 
-    const queryString =
-      typeof window !== "undefined" ? window.location.search : ""
     const pathWithQuery = `${pathname}${queryString}`
 
     if (lastPathRef.current === pathWithQuery) return
@@ -29,9 +29,9 @@ export default function MixpanelProvider({
 
     metrics.track("Page View", {
       path: pathname,
-      query: searchParams?.toString() || "",
+      query: queryString?.toString() || "",
     })
-  }, [pathname, searchParams])
+  }, [pathname, queryString])
 
   return <>{children}</>
 }
