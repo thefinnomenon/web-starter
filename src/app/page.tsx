@@ -81,8 +81,6 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-3">
-              <h1 className="text-xl font-bold">{env.APP_NAME}</h1>
-              <Badge variant="secondary">v{env.APP_VERSION}</Badge>
               <Badge variant="outline">{env.APP_ENV}</Badge>
             </div>
             <ThemeToggle />
@@ -335,16 +333,6 @@ export default function Home() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="font-medium">App Name</span>
-                    <Badge variant="outline">{env.APP_NAME}</Badge>
-                  </div>
-                  <Separator />
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">Version</span>
-                    <Badge variant="secondary">{env.APP_VERSION}</Badge>
-                  </div>
-                  <Separator />
-                  <div className="flex items-center justify-between">
                     <span className="font-medium">Environment</span>
                     <Badge
                       variant={
@@ -357,13 +345,6 @@ export default function Home() {
                     >
                       {env.APP_ENV}
                     </Badge>
-                  </div>
-                  <Separator />
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">API URL</span>
-                    <span className="text-sm text-muted-foreground font-mono">
-                      {env.API_URL}
-                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -378,39 +359,41 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button
-                  onClick={async () => {
-                    toast.error("Test client error thrown")
-                    throw new Error("Sample client error")
-                  }}
-                >
-                  <span>Throw Sample Client Error</span>
-                </Button>
-                <Button
-                  onClick={async () => {
-                    await fetch("/api/test/sentry-example-api")
-                    toast.error("Test server error thrown")
-                  }}
-                >
-                  <span>Throw Sample Server Error</span>
-                </Button>
-                <Button
-                  onClick={async () => {
-                    metrics.identify("test-user-id-123")
-                    metrics.track("Sample client metric")
-                    toast("Tracked sample client metric")
-                  }}
-                >
-                  <span>Track Sample Metric</span>
-                </Button>
-                <Button
-                  onClick={async () => {
-                    await fetch("/api/test/mixpanel-example-api")
-                    toast("Tracked sample server metric")
-                  }}
-                >
-                  <span>Track Sample Metric</span>
-                </Button>
+                <div className="flex flex-col gap-4">
+                  <Button
+                    onClick={async () => {
+                      toast.error("Test client error thrown")
+                      throw new Error("Sample client error")
+                    }}
+                  >
+                    <span>Throw Sample Client Error</span>
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      await fetch("/api/test/sentry-example-api")
+                      toast.error("Test server error thrown")
+                    }}
+                  >
+                    <span>Throw Sample Server Error</span>
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      metrics.identify("test-user-id-123")
+                      metrics.track("Sample client metric")
+                      toast("Tracked sample client metric")
+                    }}
+                  >
+                    <span>Track Sample Metric</span>
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      await fetch("/api/test/mixpanel-example-api")
+                      toast("Tracked sample server metric")
+                    }}
+                  >
+                    <span>Track Sample Metric</span>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
