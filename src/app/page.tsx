@@ -402,6 +402,47 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Email Testing */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Email Testing</CardTitle>
+                <CardDescription>
+                  Test email rendering and sending functionality.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-4">
+                  <Button
+                    variant="outline"
+                    onClick={async () => {
+                      window.open("/api/test/preview-email", "_blank")
+                    }}
+                  >
+                    <span>Preview Email</span>
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        const response = await fetch("/api/test/send-email", {
+                          method: "POST",
+                        })
+                        const data = await response.json()
+                        if (data.success) {
+                          toast.success(data.message)
+                        } else {
+                          toast.error(data.error)
+                        }
+                      } catch {
+                        toast.error("Failed to send email")
+                      }
+                    }}
+                  >
+                    <span>Send Test Email</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
