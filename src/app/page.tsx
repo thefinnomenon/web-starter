@@ -28,6 +28,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { metrics } from "@/lib/mixpanel"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -379,11 +380,36 @@ export default function Home() {
               <CardContent>
                 <Button
                   onClick={async () => {
-                    toast.error("Test error thrown")
-                    throw new Error("This error is test error")
+                    toast.error("Test client error thrown")
+                    throw new Error("Sample client error")
                   }}
                 >
-                  <span>Throw Sample Error</span>
+                  <span>Throw Sample Client Error</span>
+                </Button>
+                <Button
+                  onClick={async () => {
+                    await fetch("/api/test/sentry-example-api")
+                    toast.error("Test server error thrown")
+                  }}
+                >
+                  <span>Throw Sample Server Error</span>
+                </Button>
+                <Button
+                  onClick={async () => {
+                    metrics.identify("test-user-id-123")
+                    metrics.track("Sample client metric")
+                    toast("Tracked sample client metric")
+                  }}
+                >
+                  <span>Track Sample Metric</span>
+                </Button>
+                <Button
+                  onClick={async () => {
+                    await fetch("/api/test/mixpanel-example-api")
+                    toast("Tracked sample server metric")
+                  }}
+                >
+                  <span>Track Sample Metric</span>
                 </Button>
               </CardContent>
             </Card>
