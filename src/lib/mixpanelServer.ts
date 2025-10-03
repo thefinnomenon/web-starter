@@ -6,7 +6,6 @@ if (!token) throw new Error("Mixpanel server token is missing!")
 
 export const mixpanelSrv = Mixpanel.init(token, {
   protocol: "https",
-  verbose: true,
 })
 
 console.log(
@@ -15,15 +14,15 @@ console.log(
   '"'
 )
 
-// tiny helper with unified distinct_id
-export function trackServer(
+export const trackServer = async (
   event: string,
   distinctId: string,
   props: Record<string, unknown> = {}
-) {
-  mixpanelSrv.track(event, {
-    distinct_id: distinctId,
-    ...props,
-    _source: "server",
-  })
-}
+) =>
+  new Promise<void>((resolve, reject) =>
+    mixpanelSrv.track(
+      event,
+      { distinct_id: distinctId, ...props, _source: "server" },
+      (err?: Error) => (err ? reject(err) : resolve())
+    )
+  )
