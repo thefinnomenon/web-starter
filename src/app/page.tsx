@@ -36,7 +36,7 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  age: z.coerce
+  age: z
     .number()
     .min(13, {
       message: "Must be at least 13 years old.",
@@ -365,6 +365,26 @@ export default function Home() {
                     </span>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Tracking Info */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Tracking</CardTitle>
+                <CardDescription>
+                  Track errors, performance, logs, and user interactions.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  onClick={async () => {
+                    toast.error("Test error thrown")
+                    throw new Error("This error is test error")
+                  }}
+                >
+                  <span>Throw Sample Error</span>
+                </Button>
               </CardContent>
             </Card>
           </div>
