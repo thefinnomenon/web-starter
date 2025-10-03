@@ -5,7 +5,7 @@ const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
 export const initMixpanel = () => {
   if (!MIXPANEL_TOKEN) throw Error("Mixpanel client token is missing!")
 
-  mixpanel.init(MIXPANEL_TOKEN, { autocapture: true })
+  mixpanel.init(MIXPANEL_TOKEN, { ignore_dnt: true })
 }
 
 export const metrics = {

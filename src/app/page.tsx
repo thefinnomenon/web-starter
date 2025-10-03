@@ -383,15 +383,21 @@ export default function Home() {
                       toast("Tracked sample client metric")
                     }}
                   >
-                    <span>Track Sample Metric</span>
+                    <span>Track Sample Client Metric</span>
                   </Button>
                   <Button
                     onClick={async () => {
-                      await fetch("/api/test/mixpanel-example-api")
+                      await fetch("/api/test/mixpanel-example-api", {
+                        method: "POST",
+                        body: JSON.stringify({ id: "test-user-id-123" }),
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      })
                       toast("Tracked sample server metric")
                     }}
                   >
-                    <span>Track Sample Metric</span>
+                    <span>Track Sample Server Metric</span>
                   </Button>
                 </div>
               </CardContent>

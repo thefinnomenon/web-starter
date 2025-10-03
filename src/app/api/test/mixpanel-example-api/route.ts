@@ -2,10 +2,9 @@ import { NextResponse } from "next/server"
 import { trackServer } from "@/lib/mixpanelServer"
 
 export async function POST(req: Request) {
-  const { properties } = await req.json()
+  const { id } = await req.json()
 
-  trackServer("Sample server metric", {
-    ...properties,
+  trackServer("Sample server metric", id, {
     server: true,
   })
 
