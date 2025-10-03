@@ -414,14 +414,6 @@ export default function Home() {
               <CardContent>
                 <div className="flex flex-col gap-4">
                   <Button
-                    variant="outline"
-                    onClick={async () => {
-                      window.open("/api/test/preview-email", "_blank")
-                    }}
-                  >
-                    <span>Preview Email</span>
-                  </Button>
-                  <Button
                     onClick={async () => {
                       try {
                         const response = await fetch("/api/test/send-email", {
