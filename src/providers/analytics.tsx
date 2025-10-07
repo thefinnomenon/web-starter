@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
-import { initMixpanel, metrics } from "@/lib/mixpanel"
+import { initMixpanel, analytics } from "@/lib/analytics"
 import { isProduction } from "@/lib/env"
 
-export default function MixpanelProvider({
+export default function AnalyticsProvider({
   children,
 }: {
   children: React.ReactNode
@@ -27,7 +27,7 @@ export default function MixpanelProvider({
     if (lastPathRef.current === pathWithQuery) return
     lastPathRef.current = pathWithQuery
 
-    metrics.track("Page View", {
+    analytics.track("Page View", {
       path: pathname,
       query: queryString?.toString() || "",
     })

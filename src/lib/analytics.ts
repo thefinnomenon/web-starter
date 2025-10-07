@@ -10,7 +10,7 @@ export const initMixpanel = () => {
   })
 }
 
-export const metrics = {
+export const analytics = {
   track: (event: string, props?: Record<string, unknown>) => {
     try {
       mixpanel.track(event, props)

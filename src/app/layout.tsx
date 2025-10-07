@@ -4,7 +4,7 @@ import "./globals.css"
 
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
-import MixpanelProvider from "@/providers/mixpanel"
+import AnalyticsProvider from "@/providers/analytics"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MixpanelProvider>
+        <AnalyticsProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -41,7 +41,7 @@ export default function RootLayout({
             {children}
             <Toaster />
           </ThemeProvider>
-        </MixpanelProvider>
+        </AnalyticsProvider>
       </body>
     </html>
   )

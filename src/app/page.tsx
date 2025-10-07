@@ -27,7 +27,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { metrics } from "@/lib/mixpanel"
+import { analytics } from "@/lib/analytics"
 import { isProduction, isStaging } from "@/lib/env"
 
 const formSchema = z.object({
@@ -378,8 +378,8 @@ export default function Home() {
                   </Button>
                   <Button
                     onClick={async () => {
-                      metrics.identify("test-user-id-123")
-                      metrics.track("Sample client metric")
+                      analytics.identify("test-user-id-123")
+                      analytics.track("Sample client metric")
                       toast("Tracked sample client metric")
                     }}
                   >

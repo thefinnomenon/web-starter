@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { trackServer } from "@/lib/mixpanelServer"
+import { trackServer } from "@/lib/analyticsServer"
 
 export async function POST(req: Request) {
   const { id } = await req.json()
